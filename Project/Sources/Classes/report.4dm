@@ -1,4 +1,37 @@
-Class constructor($file : 4D:C1709.File)
+/*dependencies
+{
+  "classes": [
+    "_classCore"
+  ]
+}
+*/
+Class extends _classCore
+
+Class constructor($file)
+	
+	Super:C1705()
+	
+	Case of 
+			
+			//______________________________________________________
+		: (This:C1470.isFile($file))
+			
+			This:C1470.file:=$file.path
+			
+			//______________________________________________________
+		: (This:C1470.isText($file))
+			
+			$file:=This:C1470.isPlatformPath($file) ? File:C1566($file; fk platform path:K87:2) : File:C1566($file)
+			This:C1470.file:=$file.path
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "file msut be a 4D.File or a Text (path or platformPath)")
+			return 
+			
+			//______________________________________________________
+	End case 
 	
 	This:C1470.file:=$file.path
 	This:C1470.mode:="append"
@@ -6,8 +39,10 @@ Class constructor($file : 4D:C1709.File)
 	// Clear the log
 	This:C1470.clear()
 	
-	// Make a singleton
-	cs:C1710.singleton.new(This:C1470)
+	This:C1470.ready:=True:C214
+	
+	// ☝️ Make it a singleton
+	This:C1470.singletonize(This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function clear()

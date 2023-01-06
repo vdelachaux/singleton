@@ -13,10 +13,11 @@
 	"(Default Tables)": {},
 	"#Classes": {
 		"classes": [
+			"_classCore",
 			"env",
 			"motor",
-			"report",
-			"singleton"
+			"process",
+			"report"
 		]
 	},
 	"Tests": {

@@ -1,4 +1,15 @@
+/*dependencies
+{
+"classes": [
+"_classCore"
+]
+}
+*/
+Class extends _classCore
+
 Class constructor
+	
+	Super:C1705()
 	
 	This:C1470.exe:=Is macOS:C1572 ? Folder:C1567(Application file:C491; fk platform path:K87:2) : File:C1566(Application file:C491; fk platform path:K87:2)
 	
@@ -10,57 +21,90 @@ Class constructor
 	This:C1470.infos:=Get application info:C1599
 	This:C1470.os:=Get system info:C1571
 	
-	This:C1470._count:=Num:C11(This:C1470._count)+1
+	This:C1470.ready:=True:C214
 	
-	// Make a singleton
-	cs:C1710.singleton.new(This:C1470)
+	// ☝️ Make it a singleton
+	This:C1470.singletonize(This:C1470)
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get root() : 4D:C1709.Folder
 	
-	return (Is macOS:C1572 ? This:C1470.exe.folder("Contents") : This:C1470.exe.parent)
+	If (This:C1470.ready)
+		
+		return (Is macOS:C1572 ? This:C1470.exe.folder("Contents") : This:C1470.exe.parent)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get local() : Boolean
 	
-	return (This:C1470.type=4D Local mode:K5:1) | (This:C1470.type=4D Desktop:K5:4)
+	If (This:C1470.ready)
+		
+		return (This:C1470.type=4D Local mode:K5:1) | (This:C1470.type=4D Desktop:K5:4)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get server() : Boolean
 	
-	return (This:C1470.type=4D Server:K5:6)
+	If (This:C1470.ready)
+		
+		return (This:C1470.type=4D Server:K5:6)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get remote() : Boolean
 	
-	return (This:C1470.type=4D Remote mode:K5:5)
+	If (This:C1470.ready)
+		
+		return (This:C1470.type=4D Remote mode:K5:5)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get headless() : Boolean
 	
-	return Bool:C1537(This:C1470.infos.headless)
+	If (This:C1470.ready)
+		
+		return Bool:C1537(This:C1470.infos.headless)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get service() : Boolean
 	
-	return Bool:C1537(This:C1470.infos.launchedAsService)
+	If (This:C1470.ready)
+		
+		return Bool:C1537(This:C1470.infos.launchedAsService)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get demo() : Boolean
 	
-	return (This:C1470.versionType ?? Demo version:K5:9)
+	If (This:C1470.ready)
+		
+		return (This:C1470.versionType ?? Demo version:K5:9)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get merged() : Boolean
 	
-	return (This:C1470.versionType ?? Merged application:K5:28)
+	If (This:C1470.ready)
+		
+		return (This:C1470.versionType ?? Merged application:K5:28)
+		
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get branch() : Text
 	
-	return This:C1470.getInfos("branch")
+	return This:C1470._getVersion("branch")
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get buildNumber() : Integer
 	
 	var $version : Text
@@ -69,58 +113,70 @@ Function get buildNumber() : Integer
 	$version:=Application version:C493($buildNumber)
 	return $buildNumber
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get version() : Text
 	
-	return This:C1470.getInfos("version")
+	return This:C1470._getVersion("version")
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get shortVersion() : Text
 	
-	return This:C1470.getInfos("short-version")
+	return This:C1470._getVersion("short-version")
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get longVersion() : Text
 	
-	return This:C1470.getInfos("long-version")
+	return This:C1470._getVersion("long-version")
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get ipv4() : Text
 	
-	If (This:C1470.os.networkInterfaces#Null:C1517)\
+	If (This:C1470.ready)\
 		 && (This:C1470.os.networkInterfaces.length>0)\
 		 && (This:C1470.os.networkInterfaces[0].ipAddresses#Null:C1517)\
-		 && (This:C1470.os.networkInterfaces[0].ipAddresses.query("type=ipv4").length>0)
+		 && (This:C1470.os.networkInterfaces[0].ipAddresses.query("type = ipv4").length>0)
 		
-		return This:C1470.os.networkInterfaces[0].ipAddresses.query("type=ipv4").pop().ip
+		return This:C1470.os.networkInterfaces[0].ipAddresses.query("type = ipv4").pop().ip
 		
-	Else 
-		
-		return "#NA"
 		
 	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get machine() : Text
 	
-	return String:C10(This:C1470.os.machineName)
+	If (This:C1470.ready)
+		
+		return String:C10(This:C1470.os.machineName)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get arm() : Boolean
 	
-	return (This:C1470.os.processor="Apple M@")
+	If (This:C1470.ready)
+		
+		return (This:C1470.os.processor="Apple M@")
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get debug() : Boolean
 	
-	return (Position:C15("debug"; This:C1470._version)>0)
+	If (This:C1470.ready)
+		
+		return (Position:C15("debug"; This:C1470._version)>0)
+		
+	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get newConnectionsAllowed() : Boolean
 	
-	return This:C1470.infos.newConnectionsAllowed
-	
-	//MARK:-THREAD SAFE
+	If (This:C1470.ready)
+		
+		This:C1470.infos:=Get application info:C1599
+		return This:C1470.infos.newConnectionsAllowed
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function acceptNewConnections
@@ -128,7 +184,7 @@ Function acceptNewConnections
 	If (Asserted:C1132(This:C1470.server; Current method name:C684+" - In local mode this method does nothing"))
 		
 		REJECT NEW REMOTE CONNECTIONS:C1635(False:C215)
-		This:C1470.infos.newConnectionsAllowed:=True:C214
+		This:C1470.infos:=Get application info:C1599
 		
 	End if 
 	
@@ -138,12 +194,13 @@ Function rejectNewConnections
 	If (Asserted:C1132(This:C1470.server; Current method name:C684+" - In local mode this method does nothing"))
 		
 		REJECT NEW REMOTE CONNECTIONS:C1635(True:C214)
-		This:C1470.infos.newConnectionsAllowed:=False:C215
+		This:C1470.infos:=Get application info:C1599
 		
 	End if 
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getInfos($type : Text) : Text
+	//MARK:-
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _getVersion($type : Text) : Text
 	
 	var $major; $release; $revision : Text
 	var $c : Collection
@@ -170,13 +227,19 @@ ie:
 	
 formatted as follows:
 1      "F" denotes a final version
-       "B" denotes a beta version
-       Other characters denote an 4D internal version
+"B" denotes a beta version
+Other characters denote an 4D internal version
 2-3-4  Internal 4D compilation number
 5-6    LTS version
 7      Release number
 8      Revision number
 */
+	
+	If (This:C1470.notReady)
+		
+		return 
+		
+	End if 
 	
 	$c:=Split string:C1554(This:C1470._version; "")
 	$major:=$c[0]+$c[1]  // LTS version
@@ -194,7 +257,7 @@ formatted as follows:
 		: ($type="product")
 			
 			// Returns the current product name ie. 4D v18
-			return This:C1470.getInfos("application")+" v"+$major
+			return This:C1470._getVersion("application")+" v"+$major
 			
 			//______________________________________________________
 		: ($type="major")
@@ -212,12 +275,12 @@ Marketing + minor or release + build
 			If ($release="0")
 				
 				// 4D v18.1 build 18.128437
-				return This:C1470.getInfos("short-version")+" build "+$major+"."+String:C10(This:C1470.buildNumber)
+				return This:C1470._getVersion("short-version")+" build "+$major+"."+String:C10(This:C1470.buildNumber)
 				
 			Else 
 				
 				// 4D v18 R2 build 18R2.128437
-				return This:C1470.getInfos("short-version")+" build "+$major+"R"+$release+"."+String:C10(This:C1470.buildNumber)
+				return This:C1470._getVersion("short-version")+" build "+$major+"R"+$release+"."+String:C10(This:C1470.buildNumber)
 				
 			End if 
 			
@@ -231,17 +294,17 @@ Marketing + minor or release + build
 					//………………………………………………………
 				: ($c[0]="F")  // "F" denotes a final version
 					
-					return This:C1470.getInfos("version")
+					return This:C1470._getVersion("version")
 					
 					//………………………………………………………
 				: ($c[0]="B")  // "B" denotes a beta version
 					
-					return This:C1470.getInfos("version")+" (beta "+$c[1]+$c[2]+")"
+					return This:C1470._getVersion("version")+" (beta "+$c[1]+$c[2]+")"
 					
 					//………………………………………………………
 				Else   // Other characters denote an 4D internal version ie: 4D v18 R6 build 18R6.257882 (A1)
 					
-					return This:C1470.getInfos("version")+" ("+$c[0]+$c[3]+")"
+					return This:C1470._getVersion("version")+" ("+$c[0]+$c[3]+")"
 					
 					//………………………………………………………
 			End case 
@@ -257,12 +320,12 @@ Marketing + minor or release
 			If ($release="0")
 				
 				// Revision number
-				return This:C1470.getInfos("product")+Choose:C955($revision#"0"; "."+$revision; "")
+				return This:C1470._getVersion("product")+Choose:C955($revision#"0"; "."+$revision; "")
 				
 			Else 
 				
 				// Release number
-				return This:C1470.getInfos("product")+" R"+$release
+				return This:C1470._getVersion("product")+" R"+$release
 				
 			End if 
 			
@@ -277,12 +340,12 @@ minor or release without space for web compatibility
 			If ($release="0")
 				
 				// 14
-				return Replace string:C233(This:C1470.getInfos("major"); " "; "")
+				return Replace string:C233(This:C1470._getVersion("major"); " "; "")
 				
 			Else 
 				
 				// 14R5
-				return Replace string:C233(This:C1470.getInfos("major")+"R"+$release; " "; "")
+				return Replace string:C233(This:C1470._getVersion("major")+"R"+$release; " "; "")
 				
 			End if 
 			
@@ -315,57 +378,86 @@ minor or release without space for web compatibility
 			//______________________________________________________
 	End case 
 	
-	//MARK:-NOT THREAD SAFE
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _isPreemptive() : Boolean
+	
+	var $name : Text
+	var $id; $mode; $origin; $state : Integer
+	var $time : Time
+	
+	PROCESS PROPERTIES:C336(Current process:C322; $name; $state; $time; $mode; $id; $origin)
+	
+	return $mode ?? 1
+	
+	//MARK:-⚠️ NOT THREAD SAFE
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function restart($delay : Integer; $message : Text)
 	
-	//%T-
-	If (Count parameters:C259>=1)
+	var $name : Text
+	var $id; $mode; $origin; $state : Integer
+	var $time : Time
+	
+	PROCESS PROPERTIES:C336(Current process:C322; $name; $state; $time; $mode; $id; $origin)
+	
+	If (This:C1470._isPreemptive())
 		
-		If (Count parameters:C259>=2)
+		//%T-
+		If (Count parameters:C259>=1)
 			
-			RESTART 4D:C1292($delay; $message)
+			If (Count parameters:C259>=2)
+				
+				RESTART 4D:C1292($delay; $message)
+				
+			Else 
+				
+				RESTART 4D:C1292($delay)
+				
+			End if 
 			
 		Else 
 			
-			RESTART 4D:C1292($delay)
+			RESTART 4D:C1292
 			
 		End if 
-		
-	Else 
-		
-		RESTART 4D:C1292
+		//%T+
 		
 	End if 
-	//%T+
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function quit($delay : Integer)
 	
-	//%T-
-	QUIT 4D:C291($delay)
-	//%T+
+	If (This:C1470._isPreemptive())
+		
+		//%T-
+		QUIT 4D:C291($delay)
+		//%T+
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setUpdateFolder($folder; $silent : Boolean)
 	
-	//%T-
-	If (Value type:C1509($folder)=Is object:K8:27)
+	If (This:C1470._isPreemptive())
 		
-		If (OB Instance of:C1731($folder; 4D:C1709.Folder))
+		//%T-
+		If (Value type:C1509($folder)=Is object:K8:27)
 			
-			SET UPDATE FOLDER:C1291(String:C10($folder.platformPath); $silent)
+			If (OB Instance of:C1731($folder; 4D:C1709.Folder))
+				
+				SET UPDATE FOLDER:C1291(String:C10($folder.platformPath); $silent)
+				
+			Else 
+				
+				// ERROR
+				
+			End if 
 			
 		Else 
 			
-			// ERROR
+			SET UPDATE FOLDER:C1291(String:C10($folder); $silent)
 			
 		End if 
-		
-	Else 
-		
-		SET UPDATE FOLDER:C1291(String:C10($folder); $silent)
+		//%T+
 		
 	End if 
-	//%T+

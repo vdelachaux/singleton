@@ -1,4 +1,14 @@
-//USE: envScreens
+/*dependencies
+{
+  "classes": [
+    "_classCore"
+  ],
+  "methods": [
+    "envScreens"
+  ]
+}
+*/
+Class extends _classCore
 
 Class constructor($full : Boolean)
 	
@@ -6,7 +16,7 @@ Class constructor($full : Boolean)
 	This:C1470.userName:=Current system user:C484
 	This:C1470.systemInfos:=Get system info:C1571
 	
-	This:C1470.homeFolder:=Folder:C1567(fk desktop folder:K87:19).parent  //Folder(‘k87;24‘)
+	This:C1470.homeFolder:=Folder:C1567(fk home folder:K87:24)
 	This:C1470.desktopFolder:=Folder:C1567(fk desktop folder:K87:19)
 	This:C1470.documentsFolder:=Folder:C1567(fk documents folder:K87:21)
 	This:C1470.systemFolder:=Folder:C1567(fk system folder:K87:13)
@@ -28,8 +38,10 @@ Class constructor($full : Boolean)
 	
 	This:C1470.updateEnvironmentValues(True:C214)
 	
-	// Make a singleton
-	cs:C1710.singleton.new(This:C1470)
+	This:C1470.ready:=True:C214
+	
+	// ☝️ Make it a singleton
+	This:C1470.singletonize(This:C1470)
 	
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get macos() : Boolean
