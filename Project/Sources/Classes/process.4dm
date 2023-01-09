@@ -222,7 +222,7 @@ Function isUser() : Boolean
 	return This:C1470.origin>0
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
-	//4D’s internal process
+	// 4D’s internal process
 Function isInternal() : Boolean
 	
 	return This:C1470.origin<0
@@ -317,21 +317,21 @@ Function hide() : cs:C1710.process
 	HIDE PROCESS:C324(This:C1470.number)
 	return This:C1470
 	
-	//=================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Delays the execution of the process for a number of ticks (1 tick = 1/60th of a second)
 Function delay($delay : Integer) : cs:C1710.process
 	
 	DELAY PROCESS:C323(This:C1470.number; $delay)
 	return This:C1470
 	
-	//=================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Suspends the execution of the process until it is reactivated
 Function pause() : cs:C1710.process
 	
 	PAUSE PROCESS:C319(This:C1470.number)
 	return This:C1470
 	
-	//=================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Resumes a process whose execution has been paused or delayed
 Function resume($show : Boolean) : cs:C1710.process
 	
@@ -347,6 +347,7 @@ Function resume($show : Boolean) : cs:C1710.process
 	
 	// Mark:-
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Must be called to update status and time
 Function _update
 	
 	If (This:C1470.ready)
@@ -362,3 +363,4 @@ Function _update
 		This:C1470.mode:=$mode
 		
 	End if 
+	

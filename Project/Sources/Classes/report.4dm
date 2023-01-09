@@ -39,10 +39,10 @@ Class constructor($file)
 	// Clear the log
 	This:C1470.clear()
 	
-	This:C1470.ready:=True:C214
-	
 	// ☝️ Make it a singleton
 	This:C1470.singletonize(This:C1470)
+	
+	This:C1470.ready:=True:C214
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function clear()
@@ -67,3 +67,4 @@ Function writeLine($line : Text)
 	
 	$handler:=This:C1470.open()
 	$handler.writeLine($line)
+	

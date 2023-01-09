@@ -59,7 +59,6 @@ Function get linux() : Boolean
 	return Not:C34(Is Windows:C1573) & Not:C34(Is macOS:C1572)
 	
 	//MARK:-
-	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function startupDisk($path : Text; $create : Boolean) : Object
 	
@@ -193,7 +192,6 @@ Function applicationSupport($path : Text; $create : Boolean) : Object
 	return Count parameters:C259>=1 ? This:C1470._postProcessing($folder; $path; $create) : $folder
 	
 	//MARK:-
-	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _postProcessing($target : Object; $pathOrCreate; $create : Boolean) : Object
 	
@@ -221,3 +219,4 @@ Function _postProcessing($target : Object; $pathOrCreate; $create : Boolean) : O
 	End if 
 	
 	return $target
+	

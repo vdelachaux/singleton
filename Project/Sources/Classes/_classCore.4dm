@@ -1,14 +1,80 @@
 Class constructor
 	
-	This:C1470.ready:=False:C215
+	This:C1470[""]:=New shared object:C1526(\
+		"uid"; Generate UUID:C1066; \
+		"errors"; New shared collection:C1527; \
+		"success"; True:C214; \
+		"ready"; False:C215)
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get success() : Boolean
+	
+	return This:C1470._.success
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function set success($success : Boolean)
+	
+	Use (This:C1470._)
+		
+		This:C1470._.success:=Count parameters:C259=0 ? True:C214 : $success
+		
+	End use 
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get ready() : Boolean
+	
+	return This:C1470._.ready
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function set ready()
+	
+	Use (This:C1470._)
+		
+		This:C1470._.ready:=True:C214
+		
+	End use 
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get fail() : Boolean
+	
+	return Not:C34(This:C1470._.success)
 	
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get notReady() : Boolean
 	
-	return Not:C34(This:C1470.ready)
+	return Not:C34(This:C1470._.ready)
 	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get lastError() : Text
+	
+	var $errors : Collection
+	$errors:=This:C1470.errors
+	
+	return $errors.length=0 ? "" : $errors[$errors.length-1]
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get errors() : Collection
+	
+	return This:C1470._.errors
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get uid() : Text
+	
+	return This:C1470._.uid
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get singleton() : Boolean  // Return True if it's a refernce to the class
+	
+	return This:C1470.class#Null:C1517
+	
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get matrix() : Boolean  // Return True if it's the fisrt inastance of the class
+	
+	return This:C1470.__LockerID=Null:C1517
+	
+	// Mark:-
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
-Function singletonize($instance : Object)
+Function singletonize($instance : Object)  // Make the class a singleton
 	
 	// Get the class of the object passed in parameter
 	This:C1470.class:=OB Class:C1730($instance)
@@ -30,6 +96,29 @@ Function singletonize($instance : Object)
 		End use 
 	End if 
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function succeed($success : Boolean) : cs:C1710._classCore
+	
+	Use (This:C1470._)
+		
+		This:C1470._.success:=Count parameters:C259=0 ? True:C214 : $success
+		
+	End use 
+	
+	return This:C1470
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function failure($failure : Boolean) : cs:C1710._classCore
+	
+	Use (This:C1470._)
+		
+		This:C1470._.success:=Count parameters:C259=0 ? False:C215 : Not:C34($failure)
+		
+	End use 
+	
+	return This:C1470
+	
+	// Mark:-
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isNum($value) : Boolean
 	
@@ -70,8 +159,62 @@ Function isJsonArray($value) : Boolean
 	
 	return Match regex:C1019("(?m-si)^\\[.*\\]$"; $value; 1)
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
-Function debugerSafe($that : Object; $method; $type : Integer) : Variant
+	// Mark:-
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get _() : Object
+	
+	return This:C1470.class=Null:C1517 ? This:C1470[""] : This:C1470.class.instance[""]
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _pushError($message : Text)
+	
+	var $current; $o : Object
+	var $c : Collection
+	$c:=Get call chain:C1662
+	
+	For each ($o; $c) While ($current=Null:C1517)
+		
+		If (Position:C15("_classCore."; $o.name)#1)
+			
+			$current:=$o
+			
+		End if 
+	End for each 
+	
+	If ($current#Null:C1517)
+		
+		$message:=$current.name+" - "+(Length:C16($message)>0 ? $message : "Unknown error at line "+String:C10($current.line))
+		
+	Else 
+		
+		If ($c.length>0)
+			
+			$message:=$c[1].name+" - "+(Length:C16($message)>0 ? $message : "Unknown error at line "+String:C10($c[1].line))
+			
+		Else 
+			
+			$message:=Length:C16($message)>0 ? $message : "Unknown but irritating error!"
+			
+		End if 
+	End if 
+	
+	var $meta : Object
+	$meta:=This:C1470._
+	
+	Use ($meta)
+		
+		Use ($meta.errors)
+			
+			$meta.errors.push($message)
+			
+		End use 
+		
+		$meta.success:=False:C215
+		
+	End use 
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _debugerSafe($that : Object; $method; $type : Integer) : Variant
 	
 	Case of 
 			
@@ -133,7 +276,4 @@ Function debugerSafe($that : Object; $method; $type : Integer) : Variant
 			
 			//______________________________________________________
 	End case 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
-	
 	

@@ -96,7 +96,6 @@ Function get merged() : Boolean
 		
 		return (This:C1470.versionType ?? Merged application:K5:28)
 		
-		
 	End if 
 	
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
@@ -178,6 +177,7 @@ Function get newConnectionsAllowed() : Boolean
 		
 	End if 
 	
+	//MARK:-
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function acceptNewConnections
 	
@@ -373,7 +373,7 @@ minor or release without space for web compatibility
 			
 		Else 
 			
-			return "Unknown entry point: \""+$type+"\""
+			This:C1470._pushError(Current method name:C684+": Unknown entry point: \""+$type+"\"")
 			
 			//______________________________________________________
 	End case 
@@ -394,33 +394,25 @@ Function _isPreemptive() : Boolean
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function restart($delay : Integer; $message : Text)
 	
-	var $name : Text
-	var $id; $mode; $origin; $state : Integer
-	var $time : Time
-	
-	PROCESS PROPERTIES:C336(Current process:C322; $name; $state; $time; $mode; $id; $origin)
-	
 	If (This:C1470._isPreemptive())
 		
 		//%T-
-		If (Count parameters:C259>=1)
+		If (Count parameters:C259>=2)
 			
-			If (Count parameters:C259>=2)
-				
-				RESTART 4D:C1292($delay; $message)
-				
-			Else 
-				
-				RESTART 4D:C1292($delay)
-				
-			End if 
+			RESTART 4D:C1292($delay; $message)
 			
 		Else 
 			
-			RESTART 4D:C1292
+			RESTART 4D:C1292($delay)
 			
 		End if 
 		//%T+
+		
+		This:C1470.success:=Bool:C1537(OK)
+		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+" cannot be called from a preemptive process.")
 		
 	End if 
 	
@@ -433,6 +425,10 @@ Function quit($delay : Integer)
 		QUIT 4D:C291($delay)
 		//%T+
 		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+" cannot be called from a preemptive process.")
+		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -441,23 +437,33 @@ Function setUpdateFolder($folder; $silent : Boolean)
 	If (This:C1470._isPreemptive())
 		
 		//%T-
-		If (Value type:C1509($folder)=Is object:K8:27)
-			
-			If (OB Instance of:C1731($folder; 4D:C1709.Folder))
+		Case of 
+				//______________________________________________________
+			: (This:C1470.isFolder($folder))
 				
 				SET UPDATE FOLDER:C1291(String:C10($folder.platformPath); $silent)
+				This:C1470.success:=Bool:C1537(OK)
 				
+				//______________________________________________________
+			: (This:C1470.isText($folder))
+				
+				var $f : 4D:C1709.Folder
+				$f:=This:C1470.isPlatformPath($folder) ? Folder:C1567($folder; fk platform path:K87:2) : Folder:C1567($folder)
+				SET UPDATE FOLDER:C1291($f.platformPath; $silent)
+				This:C1470.success:=Bool:C1537(OK)
+				
+				//______________________________________________________
 			Else 
 				
-				// ERROR
+				This:C1470._pushError("The folder must be a 4D.Folder, a Path or a Pathname")
 				
-			End if 
-			
-		Else 
-			
-			SET UPDATE FOLDER:C1291(String:C10($folder); $silent)
-			
-		End if 
+				//______________________________________________________
+		End case 
 		//%T+
 		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+" cannot be called from a preemptive process.")
+		
 	End if 
+	

@@ -23,6 +23,8 @@
 	"Tests": {
 		"methods": [
 			"_test_singleton",
+			"_test_singleton_2",
+			"Compiler_Tests",
 			"test_inNewProcess",
 			"test_inNewWorker"
 		]
