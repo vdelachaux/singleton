@@ -6,6 +6,8 @@ Class constructor
 		"success"; True:C214; \
 		"ready"; False:C215)
 	
+	This:C1470.__CLASS__:=OB Class:C1730(This:C1470)
+	
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get success() : Boolean
 	
@@ -65,7 +67,7 @@ Function get uid() : Text
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get singleton() : Boolean  // Return True if it's a refernce to the class
 	
-	return This:C1470.class#Null:C1517
+	return This:C1470.__CLASS__#Null:C1517
 	
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get matrix() : Boolean  // Return True if it's the fisrt inastance of the class
@@ -77,21 +79,21 @@ Function get matrix() : Boolean  // Return True if it's the fisrt inastance of t
 Function singletonize($instance : Object)  // Make the class a singleton
 	
 	// Get the class of the object passed in parameter
-	This:C1470.class:=OB Class:C1730($instance)
+	This:C1470.__CLASS__:=OB Class:C1730($instance)
 	
-	If (This:C1470.class.instance=Null:C1517)
+	If (This:C1470.__CLASS__.instance=Null:C1517)
 		
 		// Create the instance
-		Use (This:C1470.class)
+		Use (This:C1470.__CLASS__)
 			
 			// As shareable
-			This:C1470.class.instance:=OB Copy:C1225($instance; ck shared:K85:29; This:C1470.class)
+			This:C1470.__CLASS__.instance:=OB Copy:C1225($instance; ck shared:K85:29; This:C1470.__CLASS__)
 			
 			// Save the new function…
-			This:C1470.class._new:=This:C1470.new
+			This:C1470.__CLASS__._new:=This:C1470.new
 			
 			// And replace it
-			This:C1470.class.new:=Formula:C1597(This:C1470.instance)
+			This:C1470.__CLASS__.new:=Formula:C1597(This:C1470.instance)
 			
 		End use 
 	End if 
@@ -163,7 +165,7 @@ Function isJsonArray($value) : Boolean
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get _() : Object
 	
-	return This:C1470.class=Null:C1517 ? This:C1470[""] : This:C1470.class.instance[""]
+	return This:C1470.__CLASS__=Null:C1517 ? This:C1470[""] : This:C1470.__CLASS__.instance[""]
 	
 	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 Function _pushError($message : Text)
